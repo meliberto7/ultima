@@ -1,0 +1,17 @@
+body {
+    text-align: center;
+}
+
+.divTable {
+    display: flex;
+    justify-content: center;
+    width: 100%;
+    letter-spacing: 1px;
+}
+
+.divTable table {
+    background-color: black;
+    border: 1px solid yellow;
+    color: white;
+    border-radius: 5px;
+}

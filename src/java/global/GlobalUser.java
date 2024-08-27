@@ -8,7 +8,25 @@ public class GlobalUser {
     private static String nome;
     private static String email;
     private static String senha;
+    private static String telefone;
+    private static boolean very;
 
+    public static boolean isVery() {
+        return very;
+    }
+
+    public static void setVery(boolean very) {
+        GlobalUser.very = very;
+    }
+
+    public static String getTelefone() {
+        return telefone;
+    }
+
+    public static void setTelefone(String telefone) {
+        GlobalUser.telefone = telefone;
+    }
+    
     public static int getId_usuario() {
         return id_usuario;
     }

@@ -8,6 +8,15 @@ public class Usuarios {
     private String nome;
     private String email;
     private String senha;
+    private String telefone;
+
+    public String getTelefone() {
+        return telefone;
+    }
+
+    public void setTelefone(String telefone) {
+        this.telefone = telefone;
+    }
 
     public int getId_usuario() {
         return id_usuario;

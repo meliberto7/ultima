@@ -3,12 +3,16 @@ package controller;
 
 import global.GlobalUser;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import model.bean.Carros;
 import model.bean.Usuarios;
+import model.dao.CarrosDAO;
 import model.dao.UsuarioDAO;
 
 
@@ -25,7 +29,6 @@ public class IndexController extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        processRequest(request, response);
         
         String paginaAtual = request.getServletPath();
         
@@ -33,7 +36,7 @@ public class IndexController extends HttpServlet {
             
             case "/home":
                 
-                request.getRequestDispatcher("WEB-INF/jsp/home.jsp").forward(request, response);
+                home(request, response);
                 
                 break;
             
@@ -45,8 +48,16 @@ public class IndexController extends HttpServlet {
             
             case "/login":
                 
+                GlobalUser.setVery(false);
+                System.out.println("Teste");
                 request.getRequestDispatcher("WEB-INF/jsp/login.jsp").forward(request, response);
                 
+                break;
+                
+                
+            case "/logar":
+                GlobalUser.setVery(false);
+                request.getRequestDispatcher("WEB-INF/jsp/login.jsp").forward(request, response);
                 break;
             
         }
@@ -98,9 +109,16 @@ public class IndexController extends HttpServlet {
             String senha = request.getParameter("senha");
             String nextPage = "";
             
-            UsuarioDAO dao = new UsuarioDAO();
+            UsuarioDAO daoUser = new UsuarioDAO();
             
-            if (dao.logar(email, senha)) {
+            if (daoUser.logar(email, senha)) {
+                
+                CarrosDAO daoCarro = new CarrosDAO();
+                List<Carros> list = new ArrayList();
+            
+                list = daoCarro.listar();
+            
+                request.setAttribute("carros", list);
                 
                 nextPage = "home.jsp";
                 
@@ -128,10 +146,38 @@ public class IndexController extends HttpServlet {
            usuario.setNome(request.getParameter("nome"));
            usuario.setEmail(request.getParameter("email"));
            usuario.setSenha(request.getParameter("senha"));
+           usuario.setTelefone(request.getParameter("telefone"));
            
            dao.cadastrar(usuario);
            
            request.getRequestDispatcher("WEB-INF/jsp/login.jsp").forward(request, response);
+            
+        }catch(Exception e){
+            e.printStackTrace();
+        }
+        
+    }
+    
+    private void home(HttpServletRequest request, HttpServletResponse response) {
+        
+        try{
+            
+            if (GlobalUser.isVery()) {
+                
+                CarrosDAO dao = new CarrosDAO();
+                List<Carros> list = new ArrayList();
+            
+                list = dao.listar();
+            
+                request.setAttribute("carros", list);
+                
+                request.getRequestDispatcher("WEB-INF/jsp/home.jsp").forward(request, response);
+                
+            } else {
+                
+                request.getRequestDispatcher("WEB-INF/jsp/login.jsp").forward(request, response);
+            }
+             
             
         }catch(Exception e){
             e.printStackTrace();
